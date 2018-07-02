@@ -30,13 +30,13 @@
 
   "autoload": {
     "psr-4": {
-      "EzPhpSpec": "src/EzPhpSpec"
+      "EzPhpSpec\\": "src/EzPhpSpec"
     }
   },
 
   "autoload-dev": {
     "psr-4": {
-      "spec\\EzPhpSpec": "spec/EzPhpSpec"
+      "spec\\EzPhpSpec\\": "spec/EzPhpSpec"
     }
   },
 
