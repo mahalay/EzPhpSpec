@@ -1,0 +1,46 @@
+{
+  "name":         "mahalay/ezphpspec",
+  "description":  "An extension to make PhpSpec easier to use out of the box",
+  "keywords":     ["BDD", "SpecBDD", "TDD", "spec", "specification", "tests", "testing"],
+  "homepage":     "https://github.com/mahalay/EzPhpSpec/",
+  "type":         "library",
+  "license":      "MIT",
+  "authors":      [
+    {
+      "name":      "mahalay",
+      "email":     "antolene@gmail.com",
+      "homepage":  "http://antolene.net"
+    }
+  ],
+
+  "require": {
+    "php":                      "^7.0,<7.3",
+    "phpspec/phpspec":         "^4.3"
+  },
+
+  "require-dev": {
+    "behat/behat":           "^3.3",
+    "symfony/filesystem":    "^3.2 || ^4.0",
+    "phpunit/phpunit":       "^5.7|^6.0"
+  },
+
+  "suggest": {
+    "phpspec/nyan-formatters": "Adds Nyan formatters"
+  },
+
+  "autoload": {
+    "psr-4": {
+      "EzPhpSpec": "src/EzPhpSpec"
+    }
+  },
+
+  "autoload-dev": {
+    "psr-4": {
+      "spec\\EzPhpSpec": "spec/EzPhpSpec"
+    }
+  },
+
+  "config": {
+    "bin-dir": "bin/"
+  }
+}
