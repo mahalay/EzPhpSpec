@@ -1,0 +1,7 @@
+formatter.name: pretty
+suites:
+  ezphpspec:
+    namespace: Mahalay\EzPhpSpec
+    psr4_prefix: Mahalay\EzPhpSpec
+    spec_prefix: spec\ezphpspec
+    src_path: src/Mahalay/EzPhpSpec
