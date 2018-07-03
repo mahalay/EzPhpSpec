@@ -7,19 +7,20 @@
   "license":      "MIT",
   "authors":      [
     {
-      "name":      "mahalay",
-      "email":     "antolene@gmail.com",
-      "homepage":  "http://antolene.net"
+      "name":     "mahalay",
+      "email":    "antolene@gmail.com",
+      "homepage": "http://antolene.net"
     }
   ],
 
   "require": {
-    "php":                      "^7.0,<7.3",
-    "phpspec/phpspec":         "^4.3"
+    "php":             "^7.0,<7.3",
+    "phpspec/phpspec": "^4.3"
   },
 
   "require-dev": {
-    "behat/behat":           "^3.3"
+    "behat/behat": "^3.3",
+    "squizlabs/php_codesniffer": "^3.3"
   },
 
   "autoload": {
