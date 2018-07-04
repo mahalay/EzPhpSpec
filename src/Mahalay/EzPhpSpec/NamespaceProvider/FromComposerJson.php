@@ -28,7 +28,7 @@ class FromComposerJson
     {
         return array_values(array_filter(
             $this->getUnfilteredNamespaces(),
-            function(Psr4Namespace $namespace) use ($namespacesToExclude) {
+            function (Psr4Namespace $namespace) use ($namespacesToExclude) {
                 return !$namespace->matchesNamespaces(...$namespacesToExclude);
             }
         ));

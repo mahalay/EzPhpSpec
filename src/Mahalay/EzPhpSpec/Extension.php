@@ -24,7 +24,7 @@ class Extension implements BaseExtension
 
         $updatedSuites = array_reduce(
             $namespacesFromComposer,
-            function(array $carry, Psr4Namespace $namespace) use($detectionConfig) {
+            function (array $carry, Psr4Namespace $namespace) use ($detectionConfig) {
                 return array_merge($carry, $namespace->toSuiteConfig($detectionConfig['spec_prefix']));
             },
             $suitesFromPhpspecYaml
