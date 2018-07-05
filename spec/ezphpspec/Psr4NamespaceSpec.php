@@ -23,14 +23,26 @@ class Psr4NamespaceSpec extends ObjectBehavior
         $this->beConstructedWith($namespace = 'Foo\\Bar', $srcPath = 'src');
         $key = 'foo_bar_' . hash('crc32', $srcPath);
 
-        $this->toSuiteConfig('spec')->shouldReturn([
-            $key => [
-                'namespace' => $namespace,
-                'psr4_prefix' => $namespace,
-                'spec_prefix' => "spec\\{$key}",
-                'src_path' => $srcPath
-            ]
-        ]);
+        $suiteConfig = $this->toSuiteConfig('spez');
+        $suiteConfig[$key]->shouldHaveCount(4);
+        $suiteConfig[$key]->shouldHaveKeyWithValue('namespace', $namespace);
+        $suiteConfig[$key]->shouldHaveKeyWithValue('psr4_prefix', $namespace);
+        $suiteConfig[$key]->shouldHaveKeyWithValue('spec_prefix', "spez\\{$key}");
+        $suiteConfig[$key]->shouldHaveKeyWithValue('src_path', $srcPath);
+    }
+
+    function it_should_convert_empty_namespace_into_a_suite_config_without_psr4_prefix()
+    {
+        $this->beConstructedWith($namespace = '\\', $srcPath = 'sauce');
+        $key = sprintf('_%s', hash('crc32', $srcPath));
+
+        $suiteConfig = $this->toSuiteConfig('spex');
+        $suiteConfig[$key]->shouldHaveCount(3);
+        $suiteConfig[$key]->shouldHaveKeyWithValue('namespace', '');
+        $suiteConfig[$key]->shouldHaveKeyWithValue('spec_prefix', "spex");
+        $suiteConfig[$key]->shouldHaveKeyWithValue('src_path', $srcPath);
+
+        $suiteConfig[$key]->shouldNotHaveKey('psr4_prefix');
     }
 
     function it_should_accept_psr0_namespace()

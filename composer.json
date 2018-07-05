@@ -25,7 +25,8 @@
 
   "autoload": {
     "psr-4": {
-      "Mahalay\\EzPhpSpec\\": "src/Mahalay/EzPhpSpec/"
+      "Mahalay\\EzPhpSpec\\": "src/Mahalay/EzPhpSpec/",
+      "\\": "alt-src/"
     }
   },
 

@@ -14,7 +14,7 @@ class Extension implements BaseExtension
         $detectionConfig = $this->getSuiteDetectionConfig($container);
         $suitesFromPhpspecYaml = $container->getParam('suites', []);
 
-        $namespacesFromComposer = $this->extractNamespacesFromComposerDotJson(
+        $namespacesFromComposer = $this->extractDefaultNamespacesOrFromComposerDotJson(
             $detectionConfig['root_directory'],
             array_map(
                 array($this, 'extractNamespaceFromSuite'),
@@ -53,9 +53,15 @@ class Extension implements BaseExtension
     /**
      * @return Psr4Namespace[]
      */
-    private function extractNamespacesFromComposerDotJson(string $rootDirectory, array $namespacesToExclude): array
-    {
-        $namespaceProvider = new FromComposerJson(new Filesystem(), "{$rootDirectory}/composer.json");
+    private function extractDefaultNamespacesOrFromComposerDotJson(
+        string $rootDirectory,
+        array $namespacesToExclude
+    ): array {
+        if (!is_readable($composerJsonPath = "{$rootDirectory}/composer.json")) {
+            return [Psr4Namespace::fromPsr0('', 'src')];
+        }
+
+        $namespaceProvider = new FromComposerJson(new Filesystem(), $composerJsonPath);
 
         return $namespaceProvider->getNamespaces($namespacesToExclude);
     }

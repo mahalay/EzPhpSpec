@@ -26,44 +26,56 @@ class ExtensionSpec extends ObjectBehavior
         shell_exec('rm -fr ' . escapeshellarg($this->rootDir));
     }
 
-    function it_should_load_the_extension(ServiceContainer $container)
+    function it_should_initialize_phpspec_using_autoload_in_composer_json_file(ServiceContainer $container)
     {
-        $this->prepareTheComposerDotJsonFile();
-        $this->specifyThatParametersAreRetrieved($container);
-        $this->specifyThatParametersAreSet($container);
-
-        $this->load($container, array());
-    }
-
-    private function prepareTheComposerDotJsonFile()
-    {
-        file_put_contents(
-            sprintf("%s/%s", $this->rootDir, 'composer.json'),
-            $this->getComposerDotJsonContents()
-        );
-    }
-
-    private function getComposerDotJsonContents()
-    {
-        return <<<'JSON'
+        $this->prepareTheComposerDotJsonFile(<<<'JSON'
 {
   "autoload": {
     "psr-4": {
       "Acme\\App\\": "src/"
     },
     "psr-0": {
-      "Acme\\Lib\\": "lib/"
+      "Acme\\Lib\\": "lib/",
+      "": "sauce-path/"
     }
   }
 }
 
-JSON;
+JSON
+        );
+        $this->specifyThatParametersWillBeRetrieved($container);
+        $this->specifyThatParametersWillBeSet($container);
+
+        $this->load($container, array());
+    }
+
+    function it_should_initialize_phpspec_with_default_suite_when_there_is_no_usable_config(ServiceContainer $container)
+    {
+        $_defaultSuite = [
+            '_' . hash('crc32', 'src') => [
+                'namespace' => '',
+                'src_path' => 'src',
+                'spec_prefix' => 'spec',
+            ]
+        ];
+        $container->getParam('composer_suite_detection', false)->willReturn(['root_directory' => $this->rootDir]);
+        $container->getParam('suites', [])->willReturn([]);
+        $container->setParam('composer_suite_detection', false)->shouldBeCalledTimes(1);
+        $container->setParam('suites', $_defaultSuite)->shouldBeCalledTimes(1);
+
+        $this->load($container, array());
+    }
+
+
+    private function prepareTheComposerDotJsonFile(string $contents)
+    {
+        file_put_contents(sprintf("%s/%s", $this->rootDir, 'composer.json'), $contents);
     }
 
     /**
      * @param ServiceContainer $container
      */
-    private function specifyThatParametersAreRetrieved(Collaborator $container)
+    private function specifyThatParametersWillBeRetrieved(Collaborator $container)
     {
         $container
             ->getParam('composer_suite_detection', false)
@@ -98,7 +110,7 @@ JSON;
     /**
      * @param ServiceContainer $container
      */
-    private function specifyThatParametersAreSet(Collaborator $container)
+    private function specifyThatParametersWillBeSet(Collaborator $container)
     {
         $container
             ->setParam('composer_suite_detection', false)
@@ -121,10 +133,15 @@ JSON;
     {
         return [
             'acme_app_1eb1e66a' => [
-                'namespace'=> "Acme\App",
-                'psr4_prefix'=> "Acme\App",
-                'spec_prefix'=> "cool\acme_app_1eb1e66a",
-                'src_path' => "src"
+                'namespace'=> 'Acme\App',
+                'psr4_prefix'=> 'Acme\App',
+                'spec_prefix'=> 'cool\acme_app_1eb1e66a',
+                'src_path' => 'src',
+            ],
+            '_' . hash('crc32', 'sauce-path') => [
+                'namespace' => '',
+                'spec_prefix' => 'cool',
+                'src_path' => 'sauce-path',
             ]
         ];
     }

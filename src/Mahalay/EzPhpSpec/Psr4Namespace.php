@@ -45,15 +45,17 @@ class Psr4Namespace
     {
         $namespace = $this->getNamespace();
         $suiteKey = $this->resolveSuiteKey($namespace, $this->getSourcePath());
-
-        return [
-            $suiteKey => [
+        $psr4ConfigElements = ['psr4_prefix' => $namespace, 'spec_prefix' => sprintf('%s\\%s', $specPrefix, $suiteKey)];
+        $suiteConfig = array_merge(
+            [
                 'namespace' => $namespace,
-                'psr4_prefix' => $namespace,
-                'spec_prefix' => sprintf('%s\\%s', $specPrefix, $suiteKey),
+                'spec_prefix' => $specPrefix,
                 'src_path' => $this->getSourcePath()
-            ]
-        ];
+            ],
+            ($namespace) ? $psr4ConfigElements : []
+        );
+
+        return [$suiteKey => $suiteConfig];
     }
 
     private function resolveSuiteKey(string $namespace, string $sourcePath): string
