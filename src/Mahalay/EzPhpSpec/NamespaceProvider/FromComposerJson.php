@@ -39,7 +39,7 @@ class FromComposerJson
      */
     private function getUnfilteredNamespaces(): array
     {
-        $decodedJson = (array)json_decode($x = $this->filesystem->getFileContents($this->composerJsonPath), true);
+        $decodedJson = (array)json_decode($this->filesystem->getFileContents($this->composerJsonPath), true);
         $namespaces = array_merge($this->parsePsr4Namespaces($decodedJson), $this->parsePsr0Namespaces($decodedJson));
 
         return array_reduce($namespaces, [$this, 'removeDuplicateNamespace'], []);
